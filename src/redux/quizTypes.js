@@ -1,0 +1,10 @@
+export const SAVE_USERNAME = "SAVE_USERNAME";
+
+export const GET_QUIZ_REQUEST = "GET_QUIZ_REQUEST";
+export const GET_QUIZ_SUCCESS = "GET_QUIZ_SUCCESS";
+export const GET_QUIZ_FAILURE = "GET_QUIZ_FAILURE";
+
+export const SAVE_ANSWER = "SAVE_ANSWER";
+export const SET_RESULT = "SET_RESULT";
+export const SET_ALL_RESULTS = "SET_ALL_RESULTS";
+export const DELETE_SCORE = "DELETE_SCORE";
