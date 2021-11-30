@@ -36,7 +36,12 @@ const Leaderboard = () => {
       )}
       <p className="header-text">Your place</p>
       {allResults.map(
-        (el, index) => el.score === score && <h3 className="header-text" key={index}>{index + 1}</h3>
+        (el, index) =>
+          el.score === score && (
+            <h3 className="header-text" key={index}>
+              {index + 1}
+            </h3>
+          )
       )}
       <Button
         style={{

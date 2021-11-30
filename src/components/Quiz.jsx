@@ -3,14 +3,14 @@ import Button from "@mui/material/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { saveAnswer, setResult } from "../redux/quizActions";
-import { orange } from '@mui/material/colors'; 
-import { deepOrange } from '@mui/material/colors';
+import { orange } from "@mui/material/colors";
+import { deepOrange } from "@mui/material/colors";
 
 const Quiz = () => {
   const [index, setIndex] = useState(0);
   const [value, setValue] = useState("");
   const [options, setOptions] = useState([]);
-  const [timer, setTimer] = useState(15);
+  //const [timer, setTimer] = useState(15);
   const [date, setDate] = useState(new Date());
   const [score, setScore] = useState(0);
   const [correctAnswer, setCorrectAnswer] = useState("");
@@ -26,7 +26,6 @@ const Quiz = () => {
     setScore(15000 - (new Date() - date));
     setDate(new Date());
     setIndex(index + 1);
-    setTimer(15);
   };
 
   const handleExitClick = () => {
@@ -53,7 +52,7 @@ const Quiz = () => {
   useEffect(() => {
     if (index === 10) {
       navigate("/result");
-      dispatch(setResult()); 
+      dispatch(setResult());
     } else {
       setOptions(
         shuffle([
@@ -61,75 +60,72 @@ const Quiz = () => {
           questions?.[index]?.correct_answer,
         ])
       );
+      play();
     }
   }, [index, navigate, dispatch, questions]);
 
+  const play = () => {
+    document.querySelector(".progress").className = "progress";
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => {
+        document.querySelector(".progress").className =
+          "progress play-animation";
+      });
+    });
+  };
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setTimer((prevTimer) => (prevTimer === 0 ? 15 : prevTimer - 1));
-    }, 1000);
+      setIndex(index + 1);
+    }, 15000);
+
     return () => {
       clearInterval(timer);
     };
-  }, [timer]);
-
-  // useEffect(() => {
-  //   if (timer <= 0) {
-  //     setIndex(index + 1);
-  //     setTimer(15);
-  //   }
-  // }, [timer, index]);
+    
+  }, [index]);
 
   return (
-    <div className="box">
-      <div
-        className="progress"
-        style={{
-          width: `${timer * 6.6}%`,
-          transition: "0.8s",
-          height: "10px",
-          background: "#f57c00",
-          borderRadius: "5px",
-        }}
-      ></div>
-      <div className="question-card">
-        <div className="quiz-box-left">
-          <p className="question-num"> Question {index + 1}/10</p>
-          <p className="question-text">{questions?.[index]?.question}</p>
-          <p className="question-num"> {timer}</p>
+    <div className="quiz-box">
+      <div className="progress" />
+      <div className="box">
+        <div className="question-card">
+          <div className="quiz-box-left">
+            <p className="question-num"> Question {index + 1}/10</p>
+            <p className="question-text">{questions?.[index]?.question}</p>
+          </div>
+
+          <div className="quiz-box-right">
+            {options.map((option) => (
+              <Button
+                key={Math.random()}
+                style={{
+                  background: deepOrange[400],
+                }}
+                variant="contained"
+                onClick={handleAnswerClick}
+                value={option}
+                className="answers"
+              >
+                {option}
+              </Button>
+            ))}
+          </div>
         </div>
 
-        <div className="quiz-box-right">
-          {options.map((option) => (
-            <Button
-            key={Math.random()}
-            style={{
-              background: deepOrange[400],
-            }}
-              variant="contained"
-              onClick={handleAnswerClick}
-              value={option}
-              className="answers"
-            >
-              {option}
-            </Button>
-          ))}
-        </div>
+        <Button
+          style={{
+            color: orange[900],
+            borderColor: orange[900],
+          }}
+          sx={{ mt: 1, mr: 1, width: "200px" }}
+          type="submit"
+          variant="outlined"
+          onClick={handleExitClick}
+        >
+          Exit
+        </Button>
       </div>
-      
-      <Button
-      style={{
-        color: orange[900],
-        borderColor: orange[900],
-      }}
-        sx={{ mt: 1, mr: 1, width: "200px" }}
-        type="submit"
-        variant="outlined"
-        onClick={handleExitClick}
-      >
-        Exit
-      </Button>
     </div>
   );
 };
